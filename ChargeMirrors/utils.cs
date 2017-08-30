@@ -90,6 +90,16 @@ namespace Utilities
         {
             return new Vector(op1.X  - op2.X, op1.Y - op2.Y, op1.Z - op2.Z);
         }
+
+        public static Point operator +(Point op1, Vector op2)
+        {
+            return new Point(op1.X + op2.X, op1.Y + op2.Y, op1.Z + op2.Z);
+        }
+
+        public static Point operator -(Point op1, Vector op2)
+        {
+            return new Point(op1.X - op2.X, op1.Y - op2.Y, op1.Z - op2.Z);
+        }
     }
 
     [Serializable]
@@ -265,6 +275,11 @@ namespace Utilities
         public static Vector operator *(Vector op1, double op2)
         {
             return new Vector(op1.X * op2, op1.Y * op2, op1.Z * op2);
+        }
+
+        public Vector Copy()
+        {
+            return new Vector(this.X, this.Y, this.Z);
         }
     }
 }
