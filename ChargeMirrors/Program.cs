@@ -24,15 +24,20 @@ namespace ChargeMirrors
             rightBall.dom = Domains.RightBall;
 
 
-            Point MCenter = new Point(0, 0, 2);
+            Point MCenter = new Point(0, 0, 1.6);
 
             Vector MAtomC = new Vector(0.11, new Direction(Math.PI / 2, 0)); // начальное направление
-            
 
             Vector E = new Vector(0, 0, 0);
             Polarization pol = new Polarization(E, MAtomC);
+            Polarization polPrev = pol;
 
-            for (int i = 0; i < 10; i++)
+            int iterLimit = 1000;
+            int curIter = 0;
+            int precLimit = 10;
+            double curPrec;
+
+            do
             {
                 Charge q1 = new Charge();
                 q1.q = -pol.Q;
@@ -53,7 +58,7 @@ namespace ChargeMirrors
                 q4.q = -1;
                 q4.p = new Point(+1.1, 0, 1.1);
                 q4.dom = Domains.RightBall;
-                
+
                 Queue<Charge> queue = new Queue<Charge>();
                 Queue<Charge> mqueue = new Queue<Charge>();
                 queue.Enqueue(q1);
@@ -64,10 +69,8 @@ namespace ChargeMirrors
 
                 int maxcounter = 4;
 
-
-                Point p = new Point(0, 0, 2);
-
                 int curstage = 0;
+                //int maxstage = 11;
                 int maxstage = 11;
 
                 while (curstage < maxstage)
@@ -111,14 +114,20 @@ namespace ChargeMirrors
                 mqueue.Dequeue();
                 mqueue.Dequeue();
 
+                E = new Vector(0, 0, 0);
                 while (mqueue.Count > 0)
                 {
                     Charge q = mqueue.Dequeue();
-                    E += q.ElField(p);
+                    E += q.ElField(MCenter);
                 }
-
+                polPrev = pol;
                 pol = new Polarization(E, MAtomC);
-            }
+                curPrec = -Math.Log10(Math.Abs((pol.Q - polPrev.Q) / polPrev.Q));
+                curIter++;
+            } while (curIter < iterLimit &&  curPrec < precLimit);
+            Console.WriteLine(curIter);
+            Console.WriteLine(curPrec);
+            Console.WriteLine(pol.Q);
         }
     }
 }
