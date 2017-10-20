@@ -100,6 +100,11 @@ namespace Utilities
         {
             return new Point(op1.X - op2.X, op1.Y - op2.Y, op1.Z - op2.Z);
         }
+
+        public Vector ToVector()
+        {
+            return new Vector(x, y, z);
+        }
     }
 
     [Serializable]
@@ -142,8 +147,10 @@ namespace Utilities
 
         public static Direction operator -(Direction op1)
         {
-            Direction dir = new Direction();
-            dir.Theta = Math.PI - op1.Theta;
+            Direction dir = new Direction
+            {
+                Theta = Math.PI - op1.Theta
+            };
             if (op1.Phi < Math.PI) dir.Phi = op1.Phi + Math.PI;
             else dir.Phi = op1.Phi - Math.PI;
             return dir;
@@ -190,10 +197,12 @@ namespace Utilities
 
         public Point ToPoint(Point p0)
         {
-            Point p = new Point();
-            p.X = X + p0.X;
-            p.Y = Y + p0.Y;
-            p.Z = Z + p0.Z;
+            Point p = new Point
+            {
+                X = X + p0.X,
+                Y = Y + p0.Y,
+                Z = Z + p0.Z
+            };
             return p;
         }
 
@@ -277,9 +286,19 @@ namespace Utilities
             return new Vector(op1.X * op2, op1.Y * op2, op1.Z * op2);
         }
 
+        public static Vector operator /(Vector op1, double op2)
+        {
+            return new Vector(op1.X / op2, op1.Y / op2, op1.Z / op2);
+        }
+
         public Vector Copy()
         {
             return new Vector(this.X, this.Y, this.Z);
+        }
+
+        public Point ToPoint()
+        {
+            return new Point(X, Y, Z);
         }
     }
 }
